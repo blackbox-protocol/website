@@ -23,6 +23,10 @@ const TEXT_EXT = new Set([".html", ".htm", ".css", ".js", ".mjs", ".svg", ".json
 const ALLOWED = [
   /^https?:\/\/(www\.)?github\.com(\/|$)/i,
   /^https?:\/\/www\.w3\.org\/2000\/svg$/i, // SVG namespace, never fetched
+  // Prerequisite download/setup links — plain outbound navigation only, exact URLs.
+  /^https:\/\/git-scm\.com\/downloads$/i,
+  /^https:\/\/nodejs\.org\/$/i,
+  /^https:\/\/pnpm\.io\/installation$/i,
 ];
 
 const URL_RE = /https?:\/\/[^\s"'()<>]+/gi;

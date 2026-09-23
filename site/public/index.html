@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Blackbox Protocol · The record survives.</title>
-<meta name="description" content="Blackbox turns a software action into a signed, tamper-evident receipt that anyone can verify offline, without a Blackbox server.">
+<meta name="description" content="Blackbox turns a software action into a signed, tamper-evident receipt that anyone can verify offline. Signed receipts, seven independent checks, and a reproducible evidence harness.">
 <meta name="theme-color" content="#000000">
 <link rel="icon" href="assets/favicon.svg">
 <link rel="stylesheet" href="styles.css">
@@ -15,9 +15,11 @@
   <div class="wrap">
     <a class="brand" href="#top">Blackbox</a>
     <nav class="nav-links" aria-label="Primary">
-      <a href="https://github.com/blackbox-protocol/blackbox">GitHub</a>
-      <a href="https://github.com/blackbox-protocol/blackbox/blob/main/SECURITY.md">Security</a>
-      <a href="#contact">Contact</a>
+      <a class="nav-chap" href="#see-it-work">See it work</a>
+      <a class="nav-chap" href="#how-its-built">How it's built</a>
+      <a class="nav-chap" href="#what-it-cant-do">What it can't do</a>
+      <a class="nav-ext" href="https://github.com/blackbox-protocol/blackbox">GitHub</a>
+      <a class="nav-ext" href="https://github.com/blackbox-protocol/blackbox/blob/main/SECURITY.md">Security</a>
     </nav>
   </div>
 </header>
@@ -57,7 +59,7 @@
           <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v6h6"/><path d="M9 14l2 2 4-4"/></svg></div>
           <div class="stat-num">573</div>
           <div class="stat-label">tests</div>
-          <div class="stat-sub">clean-clone verified</div>
+          <div class="stat-sub">pass from a clean clone</div>
         </div>
         <div class="stat-card">
           <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 2l8 4.5v9L12 20l-8-4.5v-9L12 2z"/><path d="M12 2v18M4 6.5l8 4.5 8-4.5"/></svg></div>
@@ -81,53 +83,81 @@
     </div>
   </div>
 
-  <!-- VERIFICATION + AXES (Phase 2 playground shell) -->
-  <section class="block verify" aria-labelledby="verify-h">
-    <div class="wrap verify-grid">
+  <!-- ================= CHAPTER 1 ================= -->
+  <div class="chapter" id="see-it-work">
+    <div class="wrap"><span class="chapter-n">01</span><span class="chapter-t">See it work</span><span class="chapter-d">What it is, whether it's for you, and proof you can run yourself.</span></div>
+  </div>
+
+  <!-- SITUATION -->
+  <section class="block situation" id="situation" aria-labelledby="sit-h">
+    <div class="wrap">
+      <h2 id="sit-h">When something goes wrong, whose word do you have?</h2>
+      <p class="section-lead">When an automated system does something you didn't expect, the account of what happened often comes from that same system.</p>
+      <ul class="sit-list">
+        <li>An AI agent deletes the wrong records.</li>
+        <li>A deployment goes out that nobody approved.</li>
+        <li>A vendor's system says it did the thing it was paid to do.</li>
+      </ul>
+      <p class="sit-body">In each case, the only account of what happened may come from the system that performed the action, or from a log that system controls.</p>
+      <p class="sit-lead">Blackbox gives the action its own record: signed when it happens and checkable afterward without asking the system that produced it.</p>
+    </div>
+  </section>
+
+  <!-- CONNECTORS -->
+  <section class="block connectors" id="connectors" aria-labelledby="con-h">
+    <div class="wrap">
+      <div class="con-head">
+        <p class="eyebrow">Connectors</p>
+        <h2 id="con-h">Three concrete things it can sign today.</h2>
+        <p class="section-lead">Each connector signs caller-supplied metadata for one kind of action. None of them call any external service.</p>
+      </div>
+      <div class="con-grid">
+        <div class="con-card">
+          <h3>AI agent actions</h3>
+          <p>Signs agent action metadata: provider, model, action kind, input and output hashes, and timestamps.</p>
+        </div>
+        <div class="con-card">
+          <h3>HTTP requests</h3>
+          <p>Signs request and response metadata: method, URL, requester id, response status, content type, scope, request id, and timestamps.</p>
+        </div>
+        <div class="con-card">
+          <h3>CI builds</h3>
+          <p>Signs build metadata: repository, workflow, run id and attempt, job, commit, ref, event, actor, runner OS, status, timestamps — plus optional source-tree, artifact, and test-result hashes.</p>
+        </div>
+      </div>
+      <p class="con-extend">These three ship as examples. The underlying library signs any structured record you give it, so the pattern extends to whatever your software does.</p>
+      <p class="con-frame">Blackbox does not watch your system. It gives you a way to make its actions checkable by someone else.</p>
+    </div>
+  </section>
+
+  <!-- PROOF (recorded demo, consolidated) -->
+  <section class="block verify proof" id="proof" aria-labelledby="verify-h">
+    <div class="wrap">
       <div class="verify-intro">
-        <p class="eyebrow">Verification</p>
-        <h2 id="verify-h">Change one byte and verification fails.</h2>
-        <p class="section-lead">A receipt is signed and verified, then altered by a single byte and verified again. The failure names the check that caught it.</p>
+        <p class="eyebrow">Proof</p>
+        <h2 id="verify-h">Change one byte. Verification fails and names the check.</h2>
+        <p class="section-lead">A recorded run verifies a signed receipt, then verifies a copy with one byte altered. The failure names the check that caught it.</p>
+        <p class="verify-disclosure">Recorded output. The verifier is not running live in this panel.</p>
       </div>
       <div class="term-col">
         <div class="terminal" id="playground">
-          <div class="term-bar" aria-hidden="true"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="title">blackbox — verify</span></div>
+          <div class="term-bar"><span class="dot r" aria-hidden="true"></span><span class="dot y" aria-hidden="true"></span><span class="dot g" aria-hidden="true"></span><span class="title">blackbox — recorded run</span></div>
           <div class="term-split">
-<pre class="term-body" id="terminal-output"><span class="t-prompt">$ blackbox sign --payload deploy-action.json --key signer.key --issuer deploy-signer --counter 1 --bundle-version 0 --key-version 0 --nonce 00112233445566778899aabbccddeeff --timestamp 2026-06-04T00:00:00Z --output receipts/deploy.cose</span>
-<span class="t-dim">signed: wrote 245 bytes to receipts/deploy.cose</span>
+            <div class="term-stack">
+<pre class="term-body" id="term-clean" aria-label="Recorded verification of the original receipt"><span class="ln"><span class="t-prompt">$ blackbox verify envelope.cose --bundle bundle.json --signer-key-id p06-demo:0</span></span><span class="ln"><span class="t-pass">composite: PASS</span></span><span class="ln sp"></span><span class="ln"><span class="t-dim">  axis            | verdict</span></span><span class="ln"><span class="t-dim">  ----------------+--------</span></span><span class="ln"><span class="t-dim">  cryptographic   | </span><span class="t-pass">pass</span></span><span class="ln"><span class="t-dim">  semantic        | </span><span class="t-pass">pass</span></span><span class="ln"><span class="t-dim">  authorization   | </span><span class="t-pass">pass</span></span><span class="ln"><span class="t-dim">  temporal        | </span><span class="t-pass">pass</span></span><span class="ln"><span class="t-dim">  revocation      | </span><span class="t-pass">pass</span></span><span class="ln"><span class="t-dim">  replay          | </span><span class="t-neval">not_evaluated</span></span><span class="ln"><span class="t-dim">  chain           | </span><span class="t-neval">not_evaluated</span></span><span class="ln sp"></span><span class="ln"><span class="t-dim">errors:</span></span><span class="ln"><span class="t-neval">  [replay] LEGACY_STREAM_ID_MISSING: receipt has no stream_id; replay axis not evaluated (legacy / inspect mode)</span></span></pre>
 
-<span class="t-prompt">$ blackbox verify receipts/deploy.cose --bundle anchors.json --signer-key-id deploy-signer:0</span>
-<span class="t-pass">composite: PASS</span>
+              <div class="byteviz" id="byteviz" aria-label="Recorded one-byte difference">
+                <p class="byteviz-head">One recorded byte changed: offset 188, <span class="hx-before">0x02</span> → <span class="hx-after">0x03</span>.</p>
+                <ol class="byte-strip" aria-hidden="true">
+                  <li>16</li><li>47</li><li>44</li><li>5F</li><li>D9</li><li>F3</li><li>A8</li><li>EC</li><li>B5</li><li>E3</li><li>56</li><li>A7</li><li>FC</li><li>9E</li><li>29</li><li class="flip" id="flip-cell">02</li>
+                </ol>
+                <p class="byteviz-facts"><span class="bf">offset <b>188</b></span><span class="bf">before <b class="hx-before">0x02</b></span><span class="bf">after <b class="hx-after">0x03</b></span></p>
+                <p class="byteviz-note">envelope.cose vs envelope.tampered.cose · last 16 bytes (offsets 173–188). The next recorded verification fails cryptographically.</p>
+              </div>
 
-<span class="t-dim">  axis            | verdict
-  ----------------+--------
-  cryptographic   | </span><span class="t-pass">pass</span><span class="t-dim">
-  semantic        | </span><span class="t-pass">pass</span><span class="t-dim">
-  authorization   | </span><span class="t-pass">pass</span><span class="t-dim">
-  temporal        | </span><span class="t-pass">pass</span><span class="t-dim">
-  revocation      | </span><span class="t-pass">pass</span><span class="t-dim">
-  replay          | </span><span class="t-neval">not_evaluated</span><span class="t-dim">
-  chain           | </span><span class="t-neval">not_evaluated</span>
-
-<span class="t-dim">errors:</span>
-  <span class="t-neval">[replay] LEGACY_STREAM_ID_MISSING: receipt has no stream_id; replay axis not evaluated (legacy / inspect mode)</span>
-
-<span class="t-prompt">$ blackbox verify receipts/deploy-tampered.cose --bundle anchors.json --signer-key-id deploy-signer:0</span>
-<span class="t-fail">composite: FAIL</span>
-
-<span class="t-dim">  axis            | verdict
-  ----------------+--------
-  cryptographic   | </span><span class="t-fail">FAIL</span><span class="t-dim">
-  semantic        | </span><span class="t-pass">pass</span><span class="t-dim">
-  authorization   | </span><span class="t-pass">pass</span><span class="t-dim">
-  temporal        | </span><span class="t-pass">pass</span><span class="t-dim">
-  revocation      | </span><span class="t-pass">pass</span><span class="t-dim">
-  replay          | </span><span class="t-neval">not_evaluated</span><span class="t-dim">
-  chain           | </span><span class="t-neval">not_evaluated</span>
-
-<span class="t-dim">errors:</span>
-  <span class="t-fail">[cryptographic] SIGNATURE_INVALID: Ed25519 verification failed</span></pre>
-            <div class="axes" id="axes-panel">
+<pre class="term-body" id="term-tampered" aria-label="Recorded verification of the altered receipt"><span class="ln"><span class="t-prompt">$ blackbox verify envelope.tampered.cose --bundle bundle.json --signer-key-id p06-demo:0</span></span><span class="ln"><span class="t-fail">composite: FAIL</span></span><span class="ln sp"></span><span class="ln"><span class="t-dim">  axis            | verdict</span></span><span class="ln"><span class="t-dim">  ----------------+--------</span></span><span class="ln"><span class="t-dim">  cryptographic   | </span><span class="t-fail">FAIL</span></span><span class="ln"><span class="t-dim">  semantic        | </span><span class="t-pass">pass</span></span><span class="ln"><span class="t-dim">  authorization   | </span><span class="t-pass">pass</span></span><span class="ln"><span class="t-dim">  temporal        | </span><span class="t-pass">pass</span></span><span class="ln"><span class="t-dim">  revocation      | </span><span class="t-pass">pass</span></span><span class="ln"><span class="t-dim">  replay          | </span><span class="t-neval">not_evaluated</span></span><span class="ln"><span class="t-dim">  chain           | </span><span class="t-neval">not_evaluated</span></span><span class="ln sp"></span><span class="ln"><span class="t-dim">errors:</span></span><span class="ln"><span class="t-fail">  [cryptographic] SIGNATURE_INVALID: Ed25519 verification failed</span></span></pre>
+            </div>
+            <aside class="axes" id="axes-panel" aria-label="Verification axes for the recorded receipt">
               <h3>Verification axes</h3>
               <ul>
                 <li><span>cryptographic</span><span class="verdict v-pass">pass</span></li>
@@ -138,88 +168,866 @@
                 <li><span>replay</span><span class="verdict v-neval">not_evaluated</span></li>
                 <li><span>chain</span><span class="verdict v-neval">not_evaluated</span></li>
               </ul>
-              <p class="axes-note">Replay and chain can be not_evaluated when required context is not supplied.</p>
+              <p class="axes-note">States for the original recorded receipt. Replay and chain are not_evaluated when required context is not supplied.</p>
+            </aside>
+          </div>
+        </div>
+        <p class="term-cap">Playback of a real Blackbox CLI run.</p>
+      </div>
+
+      <details class="proof-more">
+        <summary><span class="pm-open">Watch it run offline · full recorded output</span><span class="pm-close">Hide the recording</span></summary>
+        <div class="record-grid">
+          <figure class="rec-video">
+            <video id="demo-video" class="rec-media" poster="assets/demo-poster.jpg" preload="none" muted playsinline loop controls width="1130" height="786" aria-label="Screen recording of the Blackbox CLI signing, verifying, and re-verifying an altered receipt">
+              <source src="assets/demo.mp4" type="video/mp4">
+            </video>
+            <figcaption>Real recording. Wi-Fi off before the first command. Watch the taskbar.</figcaption>
+          </figure>
+          <figure class="rec-shot">
+            <button type="button" class="shot-trigger" id="shot-trigger" aria-haspopup="dialog" aria-label="Full output — enlarge the recorded terminal screenshot">
+              <img src="assets/full-output.png" alt="Full recorded terminal output: blackbox sign wrote 189 bytes; verify of envelope.cose returns composite PASS with cryptographic, semantic, authorization, temporal and revocation pass and replay and chain not_evaluated; one byte is flipped at offset 188; verify of envelope.tampered.cose returns composite FAIL with cryptographic FAIL and SIGNATURE_INVALID; inspect shows issuer p06-demo, counter 1, 189 bytes." width="1393" height="900" loading="lazy" decoding="async">
+              <span class="shot-tag">Full output</span>
+            </button>
+            <figcaption>Full recorded terminal output. Select to enlarge.</figcaption>
+          </figure>
+        </div>
+      </details>
+
+      <div class="evidence-inline">
+        <p class="evidence-lead">Byte-identical copies of the files from the recorded demo. Recorded demo receipt: SHA-256 812ba0dd…a95b.</p>
+        <ul class="dl-list">
+          <li class="dl-item">
+            <div class="dl-main">
+              <a class="dl-name" href="demo/envelope.cose" download>envelope.cose</a>
+              <span class="dl-meta">189 bytes · original receipt · verifies PASS</span>
+            </div>
+            <code class="dl-hash">812ba0dde139fc6d0a89669369a00542c15232131ce47f786258d63dd7c2a95b</code>
+          </li>
+          <li class="dl-item">
+            <div class="dl-main">
+              <a class="dl-name" href="demo/envelope.tampered.cose" download>envelope.tampered.cose</a>
+              <span class="dl-meta">189 bytes · one byte altered at offset 188 · verifies FAIL</span>
+            </div>
+            <code class="dl-hash">0ee5312362e30abaa590ee933e853ec5367dfb0f7c0c07df57759a8012b20a65</code>
+          </li>
+          <li class="dl-item">
+            <div class="dl-main">
+              <a class="dl-name" href="demo/bundle.json" download>bundle.json</a>
+              <span class="dl-meta">256 bytes · trust bundle for signer-key-id p06-demo:0</span>
+            </div>
+            <code class="dl-hash">42bcc128aa44ada9666da1be71c3efb4aa85ab2f4ed00c0e72d0e2de53bea60b</code>
+          </li>
+          <li class="dl-item">
+            <div class="dl-main">
+              <a class="dl-name" href="demo/payload.bin" download>payload.bin</a>
+              <span class="dl-meta">4 bytes · demo payload (DE AD BE EF)</span>
+            </div>
+            <code class="dl-hash">5f78c33274e43fa9de5659265c1d917e25c03722dcb0b8d27db8d5feaa813953</code>
+          </li>
+        </ul>
+        <p class="evidence-note">Each SHA-256 above matches the file byte-for-byte, so a downloaded copy can be checked against the recording.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EARLY TRUST BOUNDARY -->
+  <section class="block trust" id="trust-boundary" aria-labelledby="trust-h">
+    <div class="wrap">
+      <p class="eyebrow">Trust boundary</p>
+      <h2 id="trust-h" class="visually-hidden">What a receipt does and does not establish</h2>
+      <p class="section-lead">A receipt proves less than people assume — and stating that plainly is part of the design.</p>
+      <div class="trust-two">
+        <div class="trust-part trust-yes">
+          <p class="trust-k">What a receipt establishes</p>
+          <p class="trust-v">The recorded claims were signed and have not been altered afterward.</p>
+        </div>
+        <div class="trust-part trust-no">
+          <p class="trust-k">What it does not establish</p>
+          <p class="trust-v">That the system creating those claims accurately described the outside world.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHEN YOU DON'T NEED BLACKBOX -->
+  <section class="block whennot" id="when-not" aria-labelledby="whennot-h">
+    <div class="wrap">
+      <h2 id="whennot-h">When you don't need Blackbox</h2>
+      <p class="whennot-body">If you control both sides of the system and already trust your logs, Blackbox may not add much.</p>
+      <p class="whennot-body">It is most useful when the record needs to survive outside the system that created it.</p>
+    </div>
+  </section>
+
+  <!-- CODE SECTION — deferred (no verified tested example yet); insertion point preserved -->
+
+  <!-- CLI WALKTHROUGH (moved below the proof) — real README five-minute demo, step by step -->
+  <section class="block walkthrough" id="walkthrough" aria-labelledby="wt-h">
+    <div class="wrap">
+      <div class="wt-head">
+        <p class="eyebrow">Get started</p>
+        <h2 id="wt-h">Run Blackbox end to end.</h2>
+        <p class="section-lead">The real five-minute CLI demo, step by step.</p>
+        <p class="wt-disclosure">Real commands from the project README. Nothing runs in this panel — you run every command yourself.</p>
+      </div>
+
+      <div class="wt-prereqs">
+        <div class="wt-prereqs-head">
+          <span class="wt-prereqs-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/><path d="M12 9v4"/><path d="M12 16.5h.01"/></svg></span>
+          <div>
+            <h3 class="wt-prereqs-h">Before you start</h3>
+            <p class="wt-prereqs-lead">You need these three tools installed first. The steps below won't work without them.</p>
+          </div>
+        </div>
+        <div class="wt-prereq-cards">
+          <div class="wt-prereq">
+            <h4 class="wt-prereq-name">Git</h4>
+            <p class="wt-prereq-desc">Git downloads the Blackbox source code and includes Git Bash on Windows.</p>
+            <a class="wt-dl" href="https://git-scm.com/downloads" target="_blank" rel="noopener noreferrer">Download Git<span class="visually-hidden"> (opens in a new tab)</span></a>
+            <div class="wt-cmdrow"><pre class="wt-cmd"><code>git --version</code></pre><button type="button" class="wt-copy">Copy</button></div>
+          </div>
+          <div class="wt-prereq">
+            <h4 class="wt-prereq-name">Node.js</h4>
+            <p class="wt-prereq-desc">Node.js runs the JavaScript tools used to build Blackbox.</p>
+            <a class="wt-dl" href="https://nodejs.org/" target="_blank" rel="noopener noreferrer">Download Node.js<span class="visually-hidden"> (opens in a new tab)</span></a>
+            <div class="wt-cmdrow"><pre class="wt-cmd"><code>node -v</code></pre><button type="button" class="wt-copy">Copy</button></div>
+            <p class="wt-prereq-note">Tested with Node 22.</p>
+          </div>
+          <div class="wt-prereq">
+            <h4 class="wt-prereq-name">pnpm</h4>
+            <p class="wt-prereq-desc">pnpm installs and manages the Blackbox workspace dependencies.</p>
+            <a class="wt-dl" href="https://pnpm.io/installation" target="_blank" rel="noopener noreferrer">Set up pnpm<span class="visually-hidden"> (opens in a new tab)</span></a>
+            <div class="wt-cmdrow"><pre class="wt-cmd"><code>npm install -g pnpm@9</code></pre><button type="button" class="wt-copy">Copy</button></div>
+            <div class="wt-cmdrow"><pre class="wt-cmd"><code>pnpm -v</code></pre><button type="button" class="wt-copy">Copy</button></div>
+          </div>
+        </div>
+        <p class="wt-winnote">On Windows, run every command in Git Bash (it installs with Git). The commands won't work in PowerShell or Command Prompt.</p>
+      </div>
+
+      <div class="wt-panel">
+        <ol class="wt-rail" aria-label="Walkthrough progress">
+          <li class="wt-marker" data-i="0"><span class="wt-mnum">1</span><span class="wt-mlabel">Clone &amp; build</span></li>
+          <li class="wt-marker" data-i="1"><span class="wt-mnum">2</span><span class="wt-mlabel">Keys &amp; payload</span></li>
+          <li class="wt-marker" data-i="2"><span class="wt-mnum">3</span><span class="wt-mlabel">Sign</span></li>
+          <li class="wt-marker" data-i="3"><span class="wt-mnum">4</span><span class="wt-mlabel">Verify</span></li>
+          <li class="wt-marker" data-i="4"><span class="wt-mnum">5</span><span class="wt-mlabel">Tamper</span></li>
+          <li class="wt-marker" data-i="5"><span class="wt-mnum">6</span><span class="wt-mlabel">Inspect</span></li>
+        </ol>
+
+        <div class="wt-stage">
+          <!-- STEP 1 -->
+          <div class="wt-step" data-step="0" role="group" aria-labelledby="wt-s1-label">
+            <p class="wt-steplabel" id="wt-s1-label">Step 1 of 6 · Clone &amp; build</p>
+            <p class="wt-explain">Clone the repository, install dependencies with pnpm, and build every workspace. The compiled CLI lands at <code>packages/cli/dist/cli.js</code>.</p>
+            <div class="wt-cmds">
+              <div class="wt-cmdrow"><pre class="wt-cmd"><code>git clone https://github.com/blackbox-protocol/blackbox.git</code></pre><button type="button" class="wt-copy">Copy</button></div>
+              <div class="wt-cmdrow"><pre class="wt-cmd"><code>cd blackbox</code></pre><button type="button" class="wt-copy">Copy</button></div>
+              <div class="wt-cmdrow"><pre class="wt-cmd"><code>pnpm install</code></pre><button type="button" class="wt-copy">Copy</button></div>
+              <div class="wt-cmdrow"><pre class="wt-cmd"><code>pnpm -r build</code></pre><button type="button" class="wt-copy">Copy</button></div>
+            </div>
+            <p class="wt-nooutput">No terminal output is published for this step.</p>
+          </div>
+
+          <!-- STEP 2 -->
+          <div class="wt-step" data-step="1" role="group" aria-labelledby="wt-s2-label" hidden>
+            <p class="wt-steplabel" id="wt-s2-label">Step 2 of 6 · Keys &amp; payload</p>
+            <p class="wt-explain">Generate an Ed25519 keypair and a trust-anchor bundle JSON (issuer <code>demo-issuer</code>, key version 0), then write a small payload.</p>
+            <div class="wt-cmds">
+              <div class="wt-cmdrow"><pre class="wt-cmd"><code>mkdir -p ./demo</code></pre><button type="button" class="wt-copy">Copy</button></div>
+              <div class="wt-cmdrow"><pre class="wt-cmd"><code>node -e "const c=require('crypto');const fs=require('fs');const {publicKey,privateKey}=c.generateKeyPairSync('ed25519');const sk=privateKey.export({format:'der',type:'pkcs8'}).slice(-32).toString('hex');const pk=publicKey.export({format:'der',type:'spki'}).slice(-32).toString('hex');fs.writeFileSync('./demo/key.hex',sk);fs.writeFileSync('./demo/bundle.json',JSON.stringify({bundleVersion:1,authorizedIssuers:[{issuerId:'demo-issuer',keyVersion:0}],publicKeysByKeyId:{'demo-issuer:0':pk},revokedKeyIds:[]},null,2));"</code></pre><button type="button" class="wt-copy">Copy</button></div>
+              <div class="wt-cmdrow"><pre class="wt-cmd"><code>printf 'hello blackbox' &gt; ./demo/payload.bin</code></pre><button type="button" class="wt-copy">Copy</button></div>
+            </div>
+            <p class="wt-nooutput">This prints nothing. That means it worked.</p>
+          </div>
+
+          <!-- STEP 3 -->
+          <div class="wt-step" data-step="2" role="group" aria-labelledby="wt-s3-label" hidden>
+            <p class="wt-steplabel" id="wt-s3-label">Step 3 of 6 · Sign</p>
+            <p class="wt-explain">Sign the payload. The signed receipt is written to <code>./demo/receipt.cbor</code>.</p>
+            <div class="wt-cmds">
+              <div class="wt-cmdrow"><pre class="wt-cmd"><code>node packages/cli/dist/cli.js sign \
+  --payload ./demo/payload.bin \
+  --key ./demo/key.hex \
+  --issuer demo-issuer \
+  --counter 0 \
+  --bundle-version 1 \
+  --output ./demo/receipt.cbor</code></pre><button type="button" class="wt-copy">Copy</button></div>
+            </div>
+            <p class="wt-warn">Heads up: the receipt contains your whole file. Anyone you send a receipt to can read what you signed.</p>
+            <p class="wt-tip">To sign your own file, replace ./demo/payload.bin with the path to your file, e.g. /c/Users/&lt;you&gt;/Documents/notes.txt</p>
+          </div>
+
+          <!-- STEP 4 -->
+          <div class="wt-step" data-step="3" role="group" aria-labelledby="wt-s4-label" hidden>
+            <p class="wt-steplabel" id="wt-s4-label">Step 4 of 6 · Verify</p>
+            <p class="wt-explain">Verify the receipt against the trust bundle.</p>
+            <div class="wt-cmds">
+              <div class="wt-cmdrow"><pre class="wt-cmd"><code>node packages/cli/dist/cli.js verify ./demo/receipt.cbor \
+  --bundle ./demo/bundle.json \
+  --signer-key-id demo-issuer:0</code></pre><button type="button" class="wt-copy">Copy</button></div>
+            </div>
+            <p class="wt-lookfor">Look for: <code>composite: PASS</code></p>
+            <p class="wt-clarify">You'll see an 'errors:' line with a replay note under PASS. That's normal: replay and chain aren't checked in this demo. It isn't a failure.</p>
+          </div>
+
+          <!-- STEP 5 -->
+          <div class="wt-step" data-step="4" role="group" aria-labelledby="wt-s5-label" hidden>
+            <p class="wt-steplabel" id="wt-s5-label">Step 5 of 6 · Tamper</p>
+            <p class="wt-explain">Flip the last byte of the signature (XOR <code>0x01</code>) into a tampered copy, then verify again.</p>
+            <div class="wt-cmds">
+              <div class="wt-cmdrow"><pre class="wt-cmd"><code>node -e "const fs=require('fs');const b=Buffer.from(fs.readFileSync('./demo/receipt.cbor'));b[b.length-1]^=0x01;fs.writeFileSync('./demo/receipt.tampered.cbor',b);"</code></pre><button type="button" class="wt-copy">Copy</button></div>
+              <p class="wt-nooutput wt-under-cmd">This prints nothing. That means it worked.</p>
+              <div class="wt-cmdrow"><pre class="wt-cmd"><code>node packages/cli/dist/cli.js verify ./demo/receipt.tampered.cbor \
+  --bundle ./demo/bundle.json \
+  --signer-key-id demo-issuer:0 || true</code></pre><button type="button" class="wt-copy">Copy</button></div>
+            </div>
+            <p class="wt-lookfor">Look for: <code>composite: FAIL</code> and <code>SIGNATURE_INVALID</code></p>
+          </div>
+
+          <!-- STEP 6 -->
+          <div class="wt-step" data-step="5" role="group" aria-labelledby="wt-s6-label" hidden>
+            <p class="wt-steplabel" id="wt-s6-label">Step 6 of 6 · Inspect</p>
+            <p class="wt-explain">Inspect the envelope structurally. <code>inspect</code> never verifies a signature; it reports envelope structure and protected-header values only.</p>
+            <div class="wt-cmds">
+              <div class="wt-cmdrow"><pre class="wt-cmd"><code>node packages/cli/dist/cli.js inspect ./demo/receipt.cbor</code></pre><button type="button" class="wt-copy">Copy</button></div>
+            </div>
+            <p class="wt-warn">The demo folder contains a private key (demo/key.hex). Delete the folder when you're done testing.</p>
+          </div>
+        </div>
+
+        <div class="wt-controls">
+          <button type="button" class="wt-prev">Previous</button>
+          <p class="wt-count">Step <span class="wt-cur">1</span> of 6</p>
+          <button type="button" class="wt-next">Next</button>
+        </div>
+      </div>
+      <p class="wt-srfeedback visually-hidden" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- PERFORMANCE -->
+  <section class="block perf" id="performance" aria-labelledby="perf-h">
+    <div class="wrap">
+      <div class="perf-head">
+        <p class="eyebrow">Performance</p>
+        <h2 id="perf-h">What does it cost?</h2>
+        <p class="section-lead">Measured on one modest laptop, not guessed. The two numbers that matter are different, so they are kept apart.</p>
+      </div>
+      <div class="perf-cols">
+        <div class="perf-col">
+          <p class="perf-k">Warm, in-process (library call)</p>
+          <ul class="perf-list">
+            <li><b>≈2.3 ms</b> sign a 1 KiB receipt (p50)</li>
+            <li><b>≈9.9 ms</b> verify a 1 KiB receipt (p50)</li>
+            <li><b>≈93.7 ms</b> verify at 1 MiB (larger payloads cost more)</li>
+          </ul>
+        </div>
+        <div class="perf-col">
+          <p class="perf-k">Startup-inclusive (CLI invocation)</p>
+          <ul class="perf-list">
+            <li><b>≈341 ms</b> a CLI verify — includes Node startup, module load, and CLI init</li>
+            <li><b>≈11.7 ms</b> a durable file-backed replay accept (synchronous fsync + rename)</li>
+          </ul>
+        </div>
+      </div>
+      <p class="perf-qual">Measured on an HP ENVY x360 (AMD Ryzen 5 2500U, Node 22.22.2) with pure-JavaScript cryptography — a modest 2018 laptop. These are results from this specific machine and implementation, not a hardware-independent claim. A separate benchmark document records the full methodology, distributions, and raw samples.</p>
+    </div>
+  </section>
+
+  <!-- WHY NOT JUST SIGN JSON -->
+  <section class="block whyjson" id="why-json" aria-labelledby="whyjson-h">
+    <div class="wrap">
+      <h2 id="whyjson-h">Why not just sign a JSON blob?</h2>
+      <p class="section-lead">For simple signing, you should.</p>
+      <p class="whyjson-body">Blackbox is for the work around the signature:</p>
+      <ul class="whyjson-list">
+        <li>canonical bytes</li>
+        <li>structured verification</li>
+        <li>replay protection</li>
+        <li>chaining</li>
+        <li>revocation</li>
+        <li>strict parsing</li>
+        <li>and receipts other implementations can read</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 2 ================= -->
+  <section class="turn chapter-turn" id="how-its-built" aria-labelledby="ch2-line">
+    <div class="wrap">
+      <p class="chapter-eyebrow">02 · How it's built</p>
+      <p class="turn-line" id="ch2-line">That's the easy part. <span class="turn-em">Here's what took months.</span></p>
+    </div>
+  </section>
+
+  <!-- Chapter 2 orientation rail (scroll-spy; desktop only) -->
+  <nav class="eng-rail" id="eng-rail" aria-label="How it's built — sections" hidden>
+    <ol>
+      <li><a href="#axes"><span class="er-dot" aria-hidden="true"></span><span class="er-l">01 · Checks</span></a></li>
+      <li><a href="#same-code"><span class="er-dot" aria-hidden="true"></span><span class="er-l">02 · Same verifier</span></a></li>
+      <li><a href="#determinism"><span class="er-dot" aria-hidden="true"></span><span class="er-l">03 · Determinism</span></a></li>
+      <li><a href="#interop"><span class="er-dot" aria-hidden="true"></span><span class="er-l">04 · Interop</span></a></li>
+      <li><a href="#survived"><span class="er-dot" aria-hidden="true"></span><span class="er-l">05 · Adversarial</span></a></li>
+      <li><a href="#policy"><span class="er-dot" aria-hidden="true"></span><span class="er-l">06 · Gate</span></a></li>
+      <li><a href="#chain"><span class="er-dot" aria-hidden="true"></span><span class="er-l">07 · Chains</span></a></li>
+      <li><a href="#hashes"><span class="er-dot" aria-hidden="true"></span><span class="er-l">08 · Hashes</span></a></li>
+      <li><a href="#parser"><span class="er-dot" aria-hidden="true"></span><span class="er-l">09 · Parser</span></a></li>
+      <li><a href="#rebuild"><span class="er-dot" aria-hidden="true"></span><span class="er-l">10 · Rebuild</span></a></li>
+      <li><a href="#provenance"><span class="er-dot" aria-hidden="true"></span><span class="er-l">11 · Failures</span></a></li>
+    </ol>
+  </nav>
+
+  <!-- 01 · SEVEN CHECKS (major) -->
+  <section class="block seven eng-major" id="axes" aria-labelledby="seven-h">
+    <div class="wrap">
+      <div class="seven-head">
+        <p class="eyebrow">Verification surface</p>
+        <h2 id="seven-h">It tells you what it didn't check.</h2>
+        <p class="section-lead">The verifier runs seven checks in a fixed order and reports each one on its own. It does not stop at the first failure.</p>
+      </div>
+      <ol class="seven-rail" aria-label="The seven verification axes and what each one checks">
+        <li class="ax"><span class="ax-n">1</span><span class="ax-k">cryptographic</span><span class="ax-d">The Ed25519 signature verifies against the receipt.</span><span class="ax-v v-pass">pass</span></li>
+        <li class="ax"><span class="ax-n">2</span><span class="ax-k">semantic</span><span class="ax-d">The envelope and its headers parse under a closed schema.</span><span class="ax-v v-pass">pass</span></li>
+        <li class="ax"><span class="ax-n">3</span><span class="ax-k">authorization</span><span class="ax-d">The signing key is a trust anchor for the declared issuer.</span><span class="ax-v v-pass">pass</span></li>
+        <li class="ax"><span class="ax-n">4</span><span class="ax-k">temporal</span><span class="ax-d">The timestamp and counter fall inside the caller's window.</span><span class="ax-v v-pass">pass</span></li>
+        <li class="ax"><span class="ax-n">5</span><span class="ax-k">revocation</span><span class="ax-d">The signing key is not in the revoked-key set.</span><span class="ax-v v-pass">pass</span></li>
+        <li class="ax ax-cond"><span class="ax-n">6</span><span class="ax-k">replay</span><span class="ax-d">This receipt's nonce and counter have not been used before in its stream.</span><span class="ax-v v-neval">not_evaluated</span></li>
+        <li class="ax ax-cond"><span class="ax-n">7</span><span class="ax-k">chain</span><span class="ax-d">The receipt commits to the previous receipt in its stream.</span><span class="ax-v v-neval">not_evaluated</span></li>
+      </ol>
+      <div class="seven-callouts">
+        <p class="callout callout-key">A composite PASS does not mean all seven passed.</p>
+        <p class="callout callout-limit"><span class="limit-tag">LIMIT</span> Replay and chain do not run without the context they require. Supply a tracker or chain context; otherwise they report <span class="t-neval">not_evaluated</span> instead of silently passing.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · SAME VERIFIER -->
+  <section class="block same" id="same-code" aria-labelledby="same-h">
+    <div class="wrap same-grid">
+      <div class="same-copy">
+        <p class="eyebrow">One verifier</p>
+        <h2 id="same-h">We verify with the same code you do.</h2>
+        <p class="section-lead">There is no separate vendor verifier. Issuer-side verification and external verification call the identical function.</p>
+        <p class="same-note">The source contains no issuer-only verification shortcut. Confidence comes from reading the code and reproducing the evidence.</p>
+      </div>
+      <figure class="same-map" aria-label="Both the issuer and an external auditor call the same verification function, which produces one verdict.">
+        <div class="same-side">
+          <div class="same-actor">ISSUER</div>
+          <div class="same-actor">EXTERNAL AUDITOR</div>
+        </div>
+        <div class="same-join" aria-hidden="true"><span></span><span></span></div>
+        <div class="same-fn">SAME VERIFY FUNCTION</div>
+        <div class="same-arrow" aria-hidden="true"></div>
+        <div class="same-verdict">VERDICT</div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 03 · DETERMINISM -->
+  <section class="block det" id="determinism" aria-labelledby="det-h">
+    <div class="wrap det-grid">
+      <div class="det-copy">
+        <p class="eyebrow">Determinism</p>
+        <h2 id="det-h">Same bytes in. Same verdict out. Forever.</h2>
+        <p class="section-lead">The verifier is a pure function. It has no clock, no random numbers, no timers, no network, and no file I/O.</p>
+        <ul class="det-points">
+          <li>A test enforces <b>16 forbidden patterns</b> to keep it that way.</li>
+          <li>The temporal axis never reads the host clock, so a wrong system time can't change a verdict.</li>
+          <li>Your machine and an auditor's machine produce the identical result.</li>
+        </ul>
+        <p class="callout callout-limit"><span class="limit-tag">LIMIT</span> Determinism is about the verdict, not the truth of the record. It guarantees a repeatable answer, not that the signed claims describe the world.</p>
+      </div>
+      <figure class="det-pipe" aria-label="Deterministic pipeline: the same receipt bytes pass through a pure verifier and produce the same verdict, with environmental inputs excluded.">
+        <div class="det-node det-in">SAME RECEIPT BYTES</div>
+        <div class="det-flow" aria-hidden="true">
+          <span class="det-down"></span>
+          <div class="det-core">
+            <span class="det-core-t">PURE VERIFIER</span>
+            <ul class="det-excluded">
+              <li class="crossed">clock</li>
+              <li class="crossed">RNG</li>
+              <li class="crossed">timer</li>
+              <li class="crossed">network</li>
+              <li class="crossed">filesystem</li>
+            </ul>
+          </div>
+          <span class="det-down"></span>
+        </div>
+        <div class="det-node det-out">SAME VERDICT</div>
+        <figcaption>Environmental inputs are excluded by construction. A guard test blocks 16 nondeterminism patterns from re-entering the source.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 04 · INTEROP (major) -->
+  <section class="block interop eng-major" id="interop" aria-labelledby="interop-h">
+    <div class="wrap">
+      <div class="interop-head">
+        <p class="eyebrow">Cross-implementation</p>
+        <h2 id="interop-h">Three independent implementations agree.</h2>
+        <p class="section-lead">Three COSE implementations written outside Blackbox, in three languages, verify Blackbox single-signer receipts.</p>
+      </div>
+      <div class="interop-map">
+        <div class="impl-row">
+          <div class="impl"><span class="impl-name">go-cose</span><span class="impl-lang">Go</span></div>
+          <div class="impl"><span class="impl-name">pycose</span><span class="impl-lang">Python</span></div>
+          <div class="impl"><span class="impl-name">COSE-JAVA</span><span class="impl-lang">Java</span></div>
+        </div>
+        <div class="impl-converge" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="impl-target">Blackbox single-signer receipt · same verdict</div>
+      </div>
+      <div class="interop-nums">
+        <div class="inum"><b>90</b><span>external-to-Blackbox vectors</span></div>
+        <div class="inum"><b>150</b><span>fixtures</span></div>
+        <div class="inum"><b>380</b><span>vectors per harness</span></div>
+      </div>
+      <p class="interop-note">Each harness keeps its dependencies isolated: they contribute nothing to the Blackbox lockfile.</p>
+      <p class="callout callout-limit"><span class="limit-tag">LIMIT</span> Cross-implementation interoperability covers single-signer envelopes. Multi-signer interoperability is deferred.</p>
+    </div>
+  </section>
+
+  <!-- 05 · ADVERSARIAL (major) -->
+  <section class="block survived eng-major" id="survived" aria-labelledby="survived-h">
+    <div class="wrap">
+      <div class="survived-head">
+        <p class="eyebrow">Adversarial corpus</p>
+        <h2 id="survived-h">We tried to break it.</h2>
+        <p class="section-lead">A reproducible harness of randomized attacks, fuzzers, crash injection, and pinned vectors. Every count below is checked into the source.</p>
+      </div>
+      <div class="attack-board">
+        <div class="atk atk-xl">
+          <b>50,000</b><span class="atk-k">iteration gate sweep</span>
+          <span class="atk-d">Randomized gate configurations, one deterministic outcome each.</span>
+        </div>
+        <div class="atk atk-lg">
+          <b>25,000</b><span class="atk-k">connector fuzz runs</span>
+          <span class="atk-d">Per fuzz block, inside individual connectors.</span>
+        </div>
+        <div class="atk atk-lg">
+          <b>24,000</b><span class="atk-k">property evaluations</span>
+          <span class="atk-d">Randomized cryptographic invariants.</span>
+        </div>
+        <div class="atk atk-lg">
+          <b>20,000</b><span class="atk-k">parser fuzz cases</span>
+          <span class="atk-d">Across four parser surfaces.</span>
+        </div>
+        <div class="atk">
+          <b>10,000+</b><span class="atk-k">replay attacks</span>
+          <span class="atk-d">Across 10 attack classes.</span>
+        </div>
+        <div class="atk">
+          <b>6,800</b><span class="atk-k">chain attacks</span>
+          <span class="atk-d">Dropped, reordered, spliced, orphaned.</span>
+        </div>
+        <div class="atk">
+          <b>5,000</b><span class="atk-k">crash simulations</span>
+          <span class="atk-d">Process killed at four points inside a disk write; the file stays byte-unchanged and recovery stays clean.</span>
+        </div>
+        <div class="atk atk-sm">
+          <b>150</b><span class="atk-k">Wycheproof vectors</span>
+          <span class="atk-d">Pinned commit.</span>
+        </div>
+        <div class="atk atk-sm">
+          <b>50</b><span class="atk-k">differential cases</span>
+          <span class="atk-d">Against an independent implementation.</span>
+        </div>
+        <div class="atk atk-sm">
+          <b>31</b><span class="atk-k">RFC/FIPS vectors</span>
+          <span class="atk-d">Standard conformance.</span>
+        </div>
+      </div>
+      <p class="callout callout-limit"><span class="limit-tag">LIMIT</span> This is test evidence, reproducible from source — not an external audit.</p>
+    </div>
+  </section>
+
+  <!-- 06 · GATE -->
+  <section class="block policy" id="policy" aria-labelledby="policy-h">
+    <div class="wrap">
+      <div class="policy-head">
+        <p class="eyebrow">The gate</p>
+        <h2 id="policy-h">Refuse the action. Sign the refusal.</h2>
+        <p class="section-lead">The gate can block an action fail-closed and sign the denial as evidence. It evaluates in a fixed five-stage precedence.</p>
+      </div>
+      <div class="gate-cols">
+        <ol class="precedence" aria-label="The gate's five-stage fixed precedence">
+          <li><span class="pr-n">1</span><span class="pr-k">configuration</span></li>
+          <li><span class="pr-n">2</span><span class="pr-k">tracker availability</span><span class="pr-note">missing tracker → denial before verification</span></li>
+          <li><span class="pr-n">3</span><span class="pr-k">verification</span></li>
+          <li><span class="pr-n">4</span><span class="pr-k">policy</span></li>
+          <li class="pr-allow"><span class="pr-n">5</span><span class="pr-k">allow</span></li>
+        </ol>
+        <div class="gate-example">
+          <p class="gate-example-h">Example: a denied action</p>
+          <div class="flow" id="gate-flow">
+            <div class="flow-card">
+              <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 6l5 6-5 6"/><path d="M12 18h8"/></svg>Action</div>
+              <div class="v">Delete production database</div>
+            </div>
+            <div class="flow-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+            <div class="flow-card">
+              <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>Policy callback</div>
+              <div class="v">Deny destructive production actions</div>
+            </div>
+            <div class="flow-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+            <div class="flow-card deny">
+              <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>Result</div>
+              <div class="v">Denied</div>
+            </div>
+            <div class="flow-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+            <div class="flow-card">
+              <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v6h6"/></svg>Signed denial receipt</div>
+              <div class="v file">denial.cose</div>
             </div>
           </div>
         </div>
-        <p class="term-cap">Captured Blackbox CLI output. The live in-browser playground will replace this panel.</p>
       </div>
-      <div class="planet-spacer" aria-hidden="true"></div>
+      <div class="gate-facts">
+        <p class="callout callout-key">A valid signature alone never authorizes execution. Policy is always a separate step. There are four denial codes, and every denial is signed.</p>
+        <p class="callout callout-limit"><span class="limit-tag">LIMIT</span> The gate ships as a library, <code>@blackbox/gate</code>, with a policy callback. There is no gate CLI command and no policy file. The signed denial payload contains only the decision and the denial code — verdict detail is not signed. Only Mode 2 binds the denial to the intent receipt.</p>
+      </div>
     </div>
   </section>
 
-  <!-- POLICY / GATE -->
-  <section class="block policy" id="policy" aria-labelledby="policy-h">
+  <!-- 07 · CHAINS -->
+  <section class="block chain" id="chain" aria-labelledby="chain-h">
     <div class="wrap">
-      <div class="policy-grid">
-        <div>
-          <p class="eyebrow">Policy</p>
-          <h2 id="policy-h">Block the action. Sign the denial.</h2>
-          <p class="section-lead">Blackbox can block an action fail-closed and sign the denial as evidence.</p>
-        </div>
-        <div class="flow">
-          <div class="flow-card">
-            <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 6l5 6-5 6"/><path d="M12 18h8"/></svg>Action</div>
-            <div class="v">Delete production database</div>
-          </div>
-          <div class="flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-          <div class="flow-card">
-            <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>Policy callback</div>
-            <div class="v">Deny destructive production actions</div>
-          </div>
-          <div class="flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-          <div class="flow-card deny">
-            <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>Result</div>
-            <div class="v">Denied</div>
-          </div>
-          <div class="flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-          <div class="flow-card">
-            <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v6h6"/></svg>Signed denial receipt</div>
-            <div class="v file">denial.cose</div>
-          </div>
-        </div>
+      <div class="chain-head">
+        <p class="eyebrow">Chaining</p>
+        <h2 id="chain-h">Break the chain and it shows. Delete the end and it doesn't.</h2>
+        <p class="section-lead">Each receipt commits to the previous receipt's content hash. Tampering with the middle of a chain produces a specific verification failure.</p>
       </div>
-      <p class="gate-note">The gate ships as a library, <code>@blackbox/gate</code>, with a policy callback. It is not a CLI command and there is no policy file.</p>
+      <div class="chain-grid">
+        <figure class="chain-detected" aria-label="Detected chain attacks: dropping a middle receipt, reordering a pair, splicing a foreign link, or starting from an orphan all break the links.">
+          <figcaption>Detected</figcaption>
+          <div class="chainviz chainviz-broken">
+            <span class="cr">A</span><span class="cl ok" aria-hidden="true"></span><span class="cr">B</span><span class="cl broken" aria-hidden="true"></span><span class="cr cr-gone">C</span><span class="cl broken" aria-hidden="true"></span><span class="cr">D</span>
+          </div>
+          <ul class="chain-list">
+            <li>drop a receipt from the middle</li>
+            <li>reorder a pair</li>
+            <li>splice a foreign link</li>
+            <li>begin from an orphan</li>
+          </ul>
+        </figure>
+        <figure class="chain-undetected" aria-label="Undetected: deleting the newest receipt from the end leaves a shorter chain whose remaining links are still internally valid.">
+          <figcaption>Not detected</figcaption>
+          <div class="chainviz chainviz-truncated">
+            <span class="cr">A</span><span class="cl ok" aria-hidden="true"></span><span class="cr">B</span><span class="cl ok" aria-hidden="true"></span><span class="cr">C</span><span class="cr-removed">D removed</span>
+          </div>
+          <p class="chain-limit-body">A truncated chain can remain internally valid.</p>
+        </figure>
+      </div>
+      <div class="chain-callout">
+        <p class="callout callout-limit callout-strong"><span class="limit-tag">LIMIT</span> Deleting the newest receipts cannot be detected without an outside witness, because nothing points forward. Detecting it requires a transparency log or a scheme with forward-secure key evolution — both future work. This limitation is shared by every self-contained chain.</p>
+      </div>
     </div>
   </section>
 
-  <!-- WHAT IT IS NOT -->
+  <!-- 08 · TWO HASHES -->
+  <section class="block hashes" id="hashes" aria-labelledby="hashes-h">
+    <div class="wrap hashes-grid">
+      <div class="hashes-copy">
+        <p class="eyebrow">Receipt hashes</p>
+        <h2 id="hashes-h">Two hashes, on purpose.</h2>
+        <p class="section-lead">A receipt has two hashes with different jobs, and using the wrong one would quietly break chaining.</p>
+        <dl class="hash-defs">
+          <div><dt>Content hash</dt><dd>Cosign-independent. Chains link on this hash.</dd></div>
+          <div><dt>Envelope hash</dt><dd>Changes when a cosigner is added.</dd></div>
+        </dl>
+        <p class="hashes-rule"><b>The envelope hash is explicitly forbidden for replay acceptance.</b> If chaining used the envelope hash, adding a cosigner could silently break the chain relationship.</p>
+      </div>
+      <figure class="hash-diagram" aria-label="Receipt content produces a content hash used as the chain link. Adding a cosigner changes the envelope hash but not the content hash.">
+        <div class="hash-node hash-src">RECEIPT CONTENT</div>
+        <div class="hash-branch" aria-hidden="true"></div>
+        <div class="hash-line hash-line-a">
+          <span class="hash-node hash-content">CONTENT HASH</span>
+          <span class="hash-arrow" aria-hidden="true"></span>
+          <span class="hash-node hash-link">CHAIN LINK</span>
+        </div>
+        <div class="hash-line hash-line-b">
+          <span class="hash-mut">+ cosigner</span>
+          <span class="hash-arrow" aria-hidden="true"></span>
+          <span class="hash-node hash-env">ENVELOPE HASH CHANGES</span>
+        </div>
+        <figcaption>The content hash is stable across cosigning; the envelope hash is not. Only the content hash carries the chain.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 09 · PARSER -->
+  <section class="block parser" id="parser" aria-labelledby="parser-h">
+    <div class="wrap">
+      <div class="parser-head">
+        <p class="eyebrow">Deterministic CBOR</p>
+        <h2 id="parser-h">It rejects what sloppy parsers accept.</h2>
+        <p class="section-lead">Deterministic CBOR per RFC 8949, enforced on both encode and decode.</p>
+      </div>
+      <div class="reject-grid" aria-label="Encodings rejected by the deterministic CBOR profile">
+        <div class="rj">non-shortest-form integers</div>
+        <div class="rj">indefinite length</div>
+        <div class="rj">tags</div>
+        <div class="rj">floats</div>
+        <div class="rj">duplicate keys</div>
+        <div class="rj">non-canonical key order</div>
+        <div class="rj">trailing bytes</div>
+        <div class="rj">nesting beyond 1,024</div>
+      </div>
+      <div class="parser-extra">
+        <p class="pe"><span class="pe-k">Also enforced</span> Unprotected maps must be empty. Envelope arrays are closed by exact arity.</p>
+        <p class="callout callout-limit"><span class="limit-tag">LIMIT</span> Protected headers validate the labels they know and ignore unknown ones. The CDDL specification is stricter than the parser and is hand-maintained.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · REBUILD -->
+  <section class="block rebuild" id="rebuild" aria-labelledby="rebuild-h">
+    <div class="wrap rebuild-grid">
+      <div class="rebuild-copy">
+        <p class="eyebrow">Reproducibility</p>
+        <h2 id="rebuild-h">Don't trust the binary. Rebuild it.</h2>
+        <p class="section-lead">The shipped CLI rebuilds byte-identically from source: same OS, clean clone, compared by SHA-256.</p>
+        <ul class="rebuild-controls">
+          <li>no sourcemaps</li>
+          <li>no timestamps</li>
+          <li>no absolute paths</li>
+        </ul>
+        <p class="rebuild-browser">The browser bundle ships with no Node built-ins and stays under 250 KB.</p>
+        <p class="callout callout-limit"><span class="limit-tag">LIMIT</span> Same-OS rebuild verified manually, not in CI. Cross-OS byte identity is not claimed.</p>
+      </div>
+      <figure class="rebuild-flow" aria-label="A clean build from source and the shipped CLI each hash to SHA-256 values that are compared and match.">
+        <div class="rb-branch">
+          <div class="rb-path">
+            <span class="rb-node">SOURCE</span>
+            <span class="rb-down" aria-hidden="true"></span>
+            <span class="rb-node">CLEAN BUILD</span>
+            <span class="rb-down" aria-hidden="true"></span>
+            <span class="rb-node rb-hash">SHA-256 A</span>
+          </div>
+          <div class="rb-path">
+            <span class="rb-node">SHIPPED CLI</span>
+            <span class="rb-down rb-down-tall" aria-hidden="true"></span>
+            <span class="rb-node rb-hash">SHA-256 B</span>
+          </div>
+        </div>
+        <div class="rb-eq">A <span class="rb-eqs">==</span> B</div>
+        <figcaption>Same OS, same pinned toolchain. The comparison is by SHA-256.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 11 · FAILURES (major, chapter close) -->
+  <section class="block prov eng-major" id="provenance" aria-labelledby="prov-h">
+    <div class="wrap">
+      <div class="prov-head">
+        <p class="eyebrow">Provenance</p>
+        <h2 id="prov-h">We kept the failures.</h2>
+        <p class="section-lead">Two records we kept because they show the process, not the polish.</p>
+      </div>
+      <div class="prov-grid">
+        <article class="prov-card">
+          <h3>A build that died, kept beside its fix</h3>
+          <p>A run died on a missing Java dependency. The failed run is preserved byte-for-byte beside its correction.</p>
+          <ul class="prov-list">
+            <li>missing dependency coordinates</li>
+            <li>size</li>
+            <li>checksum</li>
+          </ul>
+          <p class="prov-foot">The dependency was verified against Maven Central.</p>
+        </article>
+        <article class="prov-card">
+          <h3>Three libraries disagreed, on the record</h3>
+          <p>Three COSE libraries disagreed on the same input. The expectation was written down in advance, and the execution was separated into two roles:</p>
+          <ul class="prov-roles">
+            <li><span class="role">runner</span> only captured raw bytes</li>
+            <li><span class="role">grader</span> only graded</li>
+          </ul>
+          <p>Each role demonstrated refusal to do the other's job.</p>
+          <div class="prov-verdicts">
+            <span class="pv pv-accept">cose-java · accepted</span>
+            <span class="pv pv-reject">go-cose · rejected</span>
+            <span class="pv pv-reject">pycose · rejected</span>
+          </div>
+          <p class="prov-interp">RFC 9053 imposes no canonical signature-length requirement, so this is a standards-permitted interoperability difference.</p>
+          <p class="prov-notvuln">Not a vulnerability. Not a CVE. No library is wrong.</p>
+        </article>
+      </div>
+      <p class="prov-close">The failures are part of the evidence. Removing them would make the project look cleaner and the record less useful.</p>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 3 ================= -->
+  <div class="chapter" id="what-it-cant-do">
+    <div class="wrap"><span class="chapter-n">03</span><span class="chapter-t">What it can't do</span><span class="chapter-d">The boundaries, stated plainly — and where the project goes next.</span></div>
+  </div>
+
+  <!-- WHAT'S IN THE BOX -->
+  <section class="block box" id="whats-in-the-box" aria-labelledby="box-h">
+    <div class="wrap">
+      <div class="box-head">
+        <p class="eyebrow">Architecture</p>
+        <h2 id="box-h">What's in the box.</h2>
+        <p class="section-lead">At runtime your software calls one path. The evidence harness is a separate supporting layer — it is not something your software calls to verify.</p>
+      </div>
+      <div class="box-cols">
+        <figure class="runtime-flow" aria-label="Runtime flow: your software calls a connector or integration, which calls @blackbox/core, which produces a receipt, which is checked by verification or the gate.">
+          <figcaption class="rf-cap">Runtime flow</figcaption>
+          <div class="rf-node">your software</div>
+          <div class="rf-down" aria-hidden="true"></div>
+          <div class="rf-node">connector / integration</div>
+          <div class="rf-down" aria-hidden="true"></div>
+          <div class="rf-node rf-core">@blackbox/core</div>
+          <div class="rf-down" aria-hidden="true"></div>
+          <div class="rf-node rf-receipt">receipt</div>
+          <div class="rf-down" aria-hidden="true"></div>
+          <div class="rf-node">verification / gate</div>
+        </figure>
+        <div class="box-aside">
+          <figure class="support-layer" aria-label="Supporting layer, outside the runtime flow: the evidence package is a reproducible test corpus and harness.">
+            <figcaption class="sl-cap">Supporting layer — not in the runtime flow</figcaption>
+            <div class="sl-node">@blackbox/evidence</div>
+            <p class="sl-note">reproducible test corpus / harness</p>
+          </figure>
+          <div class="pkg-list">
+            <p class="pkg-h">Packages</p>
+            <ul>
+              <li><code>@blackbox/core</code> — signing + verification</li>
+              <li><code>blackbox</code> — the CLI</li>
+              <li><code>@blackbox/gate</code> — policy gate (source-visible)</li>
+              <li><code>@blackbox/evidence</code> — test corpus / harness</li>
+              <li><code>connector: ai-agent</code></li>
+              <li><code>connector: http-request</code></li>
+              <li><code>connector: github-actions-build</code></li>
+            </ul>
+            <p class="pkg-npm">Not published to npm yet. Build from source.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HONEST LIMITS (recap) -->
   <section class="block limits" id="limits" aria-labelledby="limits-h">
     <div class="wrap">
-      <div class="limits-grid">
-        <div class="limits-head">
-          <p class="eyebrow">Honest limits</p>
-          <h2 id="limits-h">What it is not.</h2>
+      <div class="limits-head">
+        <p class="eyebrow">Honest limits</p>
+        <h2 id="limits-h">What it is not.</h2>
+      </div>
+      <ul class="notlist" aria-label="What Blackbox is not">
+        <li>Not externally audited.</li>
+        <li>No formal verification.</li>
+        <li>Ed25519 only.</li>
+        <li>No post-quantum support.</li>
+        <li>Not compliance.</li>
+        <li>Not identity.</li>
+        <li>Not monitoring.</li>
+        <li>Not a blockchain.</li>
+        <li>Tamper-evident, not tamper-proof.</li>
+        <li>It does not protect a stolen key.</li>
+        <li>It does not make JavaScript signing constant-time.</li>
+        <li>It should not be exposed as a public signing endpoint.</li>
+      </ul>
+      <p class="limit-statement">A receipt establishes the integrity of the claims recorded in it. It does not establish that the recorder told the truth about the world.</p>
+    </div>
+  </section>
+
+  <!-- BUILT, NOT SWITCHED ON -->
+  <section class="block internal" id="internal" aria-labelledby="internal-h">
+    <div class="wrap">
+      <div class="internal-head">
+        <p class="eyebrow">In the source</p>
+        <h2 id="internal-h">Built, not switched on.</h2>
+        <p class="section-lead">These capabilities are readable in the source today, but they are not public API in v0.1.</p>
+      </div>
+      <div class="internal-grid">
+        <div class="int-card">
+          <span class="int-badge">Built · Internal · Not exported</span>
+          <h3>Replayable verification session state machine</h3>
         </div>
-        <div class="limit-card">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg></div>
-          <h3>Not externally audited</h3>
-          <p>This is v0.1.0.</p>
+        <div class="int-card">
+          <span class="int-badge">Built · Internal · Not exported</span>
+          <h3>Immutable, version-pinned trust-anchor registry</h3>
         </div>
-        <div class="limit-card">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 12h6"/></svg></div>
-          <h3>No formal verification.</h3>
-          <p>The implementation is not formally verified.</p>
+        <div class="int-card">
+          <span class="int-badge">Built · Internal · Not exported</span>
+          <h3>Trust-lineage graph resolver with cycle detection</h3>
         </div>
-        <div class="limit-card">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="8" cy="12" r="3.2"/><path d="M11 12h9M17 12v3"/></svg></div>
-          <h3>Ed25519 only</h3>
-          <p>Ed25519 signatures only.</p>
-        </div>
-        <div class="limit-statement">A receipt makes the record verifiable — not that the recorder told the truth about the world.</div>
       </div>
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section class="block contact" id="contact" aria-labelledby="contact-h">
+  <!-- WHAT'S NEXT -->
+  <section class="block next" id="whats-next" aria-labelledby="next-h">
     <div class="wrap">
-      <p class="eyebrow">Contact</p>
-      <h2 id="contact-h">Get in touch.</h2>
-      <div class="contact-grid">
-        <a href="https://github.com/blackbox-protocol/blackbox"><span>GitHub</span><strong>blackbox-protocol/blackbox</strong></a>
-        <a href="mailto:hello@blackboxprotocol.dev"><span>General</span><strong>hello@blackboxprotocol.dev</strong></a>
-        <a href="mailto:security@blackboxprotocol.dev"><span>Security</span><strong>security@blackboxprotocol.dev</strong></a>
+      <div class="next-head">
+        <p class="eyebrow">Direction</p>
+        <h2 id="next-h">What's next.</h2>
+        <p class="section-lead">These are intentions, not commitments.</p>
+      </div>
+      <div class="next-cols">
+        <div class="next-col next-built">
+          <p class="next-k">Built next</p>
+          <ul>
+            <li>npm publication after a public review window</li>
+            <li>an external witness / transparency registration</li>
+            <li>post-quantum signature work</li>
+            <li>an exported trust-lineage layer</li>
+          </ul>
+        </div>
+        <div class="next-col next-not">
+          <p class="next-k">Not promised</p>
+          <ul>
+            <li>no dates</li>
+            <li>no compatibility guarantees</li>
+            <li>no promise that every item ships exactly as described</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADJACENT WORK -->
+  <section class="block adjacent" id="adjacent" aria-labelledby="adjacent-h">
+    <div class="wrap">
+      <div class="adjacent-head">
+        <p class="eyebrow">Ecosystem</p>
+        <h2 id="adjacent-h">Adjacent work</h2>
+        <p class="section-lead">Blackbox sits next to other work on software integrity. It is not a replacement for any of it.</p>
+      </div>
+      <div class="adj-grid">
+        <div class="adj-card">
+          <h3>Supply-chain provenance</h3>
+          <p class="adj-names">Sigstore · in-toto · SLSA</p>
+          <p>These address which inputs and build steps produced which artifact.</p>
+        </div>
+        <div class="adj-card">
+          <h3>Transparency registration</h3>
+          <p class="adj-names">IETF SCITT · RFC 9943</p>
+          <p>This registers signed statements with a transparency service.</p>
+        </div>
+        <div class="adj-card">
+          <h3>Agent action receipts</h3>
+          <p class="adj-names">Draft work</p>
+          <p>There is active draft work on AI-agent action receipts.</p>
+        </div>
+      </div>
+      <p class="adj-distinction">Blackbox is the receipt, not the witness.</p>
+      <p class="adj-note">No compatibility or alignment is claimed with any of them.</p>
+    </div>
+  </section>
+
+  <!-- GET INVOLVED -->
+  <section class="block involved" id="contact" aria-labelledby="involved-h">
+    <div class="wrap">
+      <p class="eyebrow">Participate</p>
+      <h2 id="involved-h">Get involved</h2>
+      <p class="section-lead">The source is public and Apache-2.0. Read it, break it, or tell us what's missing.</p>
+      <div class="involved-grid">
+        <a class="inv-card" href="https://github.com/blackbox-protocol/blackbox"><span class="inv-k">Read the source</span><strong>GitHub</strong></a>
+        <a class="inv-card" href="https://github.com/blackbox-protocol/blackbox/issues"><span class="inv-k">Found a problem?</span><strong>Open an issue</strong></a>
+        <a class="inv-card" href="https://github.com/blackbox-protocol/blackbox/blob/main/CONTRIBUTING.md"><span class="inv-k">Want to contribute?</span><strong>CONTRIBUTING.md</strong></a>
+        <a class="inv-card" href="https://github.com/blackbox-protocol/blackbox/blob/main/SECURITY.md"><span class="inv-k">Security issue?</span><strong>SECURITY.md</strong></a>
+        <a class="inv-card" href="mailto:hello@blackboxprotocol.dev"><span class="inv-k">General</span><strong>hello@blackboxprotocol.dev</strong></a>
+        <a class="inv-card" href="mailto:security@blackboxprotocol.dev"><span class="inv-k">Security</span><strong>security@blackboxprotocol.dev</strong></a>
       </div>
     </div>
   </section>
@@ -232,6 +1040,16 @@
   </div>
 </footer>
 
-<script src="main.js" defer></script>
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Full recorded output" hidden>
+  <div class="lightbox-inner">
+    <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Close full output">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <img id="lightbox-img" src="assets/full-output.png" alt="Enlarged full recorded terminal output showing the sign, verify PASS, byte flip at offset 188, verify FAIL with SIGNATURE_INVALID, and inspect of the p06-demo receipt." width="1393" height="900">
+  </div>
+</div>
+
+<script src="main.js?v=3" defer></script>
 </body>
 </html>

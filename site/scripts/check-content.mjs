@@ -54,6 +54,12 @@ const BANNED_PHRASES = [
   "no network. no service", "just math",
   "same principles", "different altitude",
   "evidence over assertions",
+  // stale copy retired in the final copy-correction pass
+  // NOTE: "no service required" was previously retired here, but the approved
+  // 19-section content specification reinstates it as hero supporting copy and a
+  // hero chip (README: "no Blackbox server, account, or network connection
+  // required"). It is a supported claim, so it is no longer banned.
+  "clean-clone verified",
 ];
 
 // Retired launch numbers, comma-optional, not embedded in a longer digit run.

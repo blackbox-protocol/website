@@ -1,0 +1,13 @@
+{
+  "bundleVersion": 0,
+  "authorizedIssuers": [
+    {
+      "issuerId": "p06-demo",
+      "keyVersion": 0
+    }
+  ],
+  "publicKeysByKeyId": {
+    "p06-demo:0": "62ab492b62d3a4ae3c961458d091e0a9e6d088b17f2ed67ff6a2efa13b5a0ecb"
+  },
+  "revokedKeyIds": []
+}
