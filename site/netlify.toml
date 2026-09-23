@@ -1,0 +1,27 @@
+# Netlify configuration for blackboxprotocol.dev — CONFIG ONLY. Not deployed.
+#
+# This file lives at site/netlify.toml, so the Netlify site's **base directory**
+# must be set to `site` (one-time, in the Netlify UI or `netlify.toml` linking).
+# With base = site, `publish = "public"` resolves to site/public.
+#
+# The site is static: no build step, no framework, no external requests.
+
+[build]
+  publish = "public"
+  command = ""
+
+# Strict security headers. The site loads only same-origin assets and makes zero
+# network requests, so every fetch directive is 'self' or 'none'. Outbound <a>
+# links to github.com and mailto: are top-level navigations, which CSP fetch
+# directives do not govern.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; media-src 'self'; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "no-referrer"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Resource-Policy = "same-origin"

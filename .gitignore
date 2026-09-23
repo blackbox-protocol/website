@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Reference / source media — design sources, demo captures, review screenshots.
+# Never shipped; production derivatives live in site/public/assets/.
+site/_incoming/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Temp
+*.tmp
+tmp/
+.tmp/

@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blackbox Protocol · The record survives.</title>
+<meta name="description" content="Blackbox turns a software action into a signed, tamper-evident receipt that anyone can verify offline, without a Blackbox server.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">Blackbox</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="https://github.com/blackbox-protocol/blackbox">GitHub</a>
+      <a href="https://github.com/blackbox-protocol/blackbox/blob/main/SECURITY.md">Security</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="h">
+    <img class="hero-art" src="assets/hero-blackbox.webp" alt="A battered orange flight recorder resting in dark wreckage. Its end plate reads: Blackbox Protocol, ED25519, COSE_Sign1, RFC 9052, verify offline." width="1672" height="941" fetchpriority="high">
+    <div class="hero-fade" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="eyebrow">Ed25519 · COSE_Sign1 · RFC 9052</p>
+        <h1 id="h">The record survives.</h1>
+        <p class="tagline">Software acts. Blackbox makes the record verifiable.</p>
+        <p class="lede">Signed, tamper-evident receipts for software actions. Verify offline. No service required.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://github.com/blackbox-protocol/blackbox">
+            <svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            View on GitHub
+          </a>
+          <a class="btn btn-ghost" href="https://github.com/blackbox-protocol/blackbox#readme">Read README</a>
+        </div>
+        <div class="hero-tags">
+          <span>Apache-2.0</span>
+          <span>Offline verifiable</span>
+          <span>No service required</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats" role="region" aria-label="Project status">
+    <div class="wrap">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v6h6"/><path d="M9 14l2 2 4-4"/></svg></div>
+          <div class="stat-num">573</div>
+          <div class="stat-label">tests</div>
+          <div class="stat-sub">clean-clone verified</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 2l8 4.5v9L12 20l-8-4.5v-9L12 2z"/><path d="M12 2v18M4 6.5l8 4.5 8-4.5"/></svg></div>
+          <div class="stat-num">231</div>
+          <div class="stat-label">verification vectors</div>
+          <div class="stat-sub">31 RFC/FIPS · 150 Wycheproof · 50 differential</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M2 20h20"/></svg></div>
+          <div class="stat-num">3 <span class="dots">●●●</span></div>
+          <div class="stat-label">OS CI green</div>
+          <div class="stat-sub">Ubuntu · Windows · macOS</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 3 8 7 13 4-5 7-8 7-13a7 7 0 0 0-7-7z"/><path d="M9 9a3 3 0 0 1 6 0c0 2-3 3-3 3"/></svg></div>
+          <div class="stat-num">Byte-identical</div>
+          <div class="stat-label">rebuilds</div>
+          <div class="stat-sub">CLI + browser bundle</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERIFICATION + AXES (Phase 2 playground shell) -->
+  <section class="block verify" aria-labelledby="verify-h">
+    <div class="wrap verify-grid">
+      <div class="verify-intro">
+        <p class="eyebrow">Verification</p>
+        <h2 id="verify-h">Change one byte and verification fails.</h2>
+        <p class="section-lead">A receipt is signed and verified, then altered by a single byte and verified again. The failure names the check that caught it.</p>
+      </div>
+      <div class="term-col">
+        <div class="terminal" id="playground">
+          <div class="term-bar" aria-hidden="true"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="title">blackbox — verify</span></div>
+          <div class="term-split">
+<pre class="term-body" id="terminal-output"><span class="t-prompt">$ blackbox sign --payload deploy-action.json --key signer.key --issuer deploy-signer --counter 1 --bundle-version 0 --key-version 0 --nonce 00112233445566778899aabbccddeeff --timestamp 2026-06-04T00:00:00Z --output receipts/deploy.cose</span>
+<span class="t-dim">signed: wrote 245 bytes to receipts/deploy.cose</span>
+
+<span class="t-prompt">$ blackbox verify receipts/deploy.cose --bundle anchors.json --signer-key-id deploy-signer:0</span>
+<span class="t-pass">composite: PASS</span>
+
+<span class="t-dim">  axis            | verdict
+  ----------------+--------
+  cryptographic   | </span><span class="t-pass">pass</span><span class="t-dim">
+  semantic        | </span><span class="t-pass">pass</span><span class="t-dim">
+  authorization   | </span><span class="t-pass">pass</span><span class="t-dim">
+  temporal        | </span><span class="t-pass">pass</span><span class="t-dim">
+  revocation      | </span><span class="t-pass">pass</span><span class="t-dim">
+  replay          | </span><span class="t-neval">not_evaluated</span><span class="t-dim">
+  chain           | </span><span class="t-neval">not_evaluated</span>
+
+<span class="t-dim">errors:</span>
+  <span class="t-neval">[replay] LEGACY_STREAM_ID_MISSING: receipt has no stream_id; replay axis not evaluated (legacy / inspect mode)</span>
+
+<span class="t-prompt">$ blackbox verify receipts/deploy-tampered.cose --bundle anchors.json --signer-key-id deploy-signer:0</span>
+<span class="t-fail">composite: FAIL</span>
+
+<span class="t-dim">  axis            | verdict
+  ----------------+--------
+  cryptographic   | </span><span class="t-fail">FAIL</span><span class="t-dim">
+  semantic        | </span><span class="t-pass">pass</span><span class="t-dim">
+  authorization   | </span><span class="t-pass">pass</span><span class="t-dim">
+  temporal        | </span><span class="t-pass">pass</span><span class="t-dim">
+  revocation      | </span><span class="t-pass">pass</span><span class="t-dim">
+  replay          | </span><span class="t-neval">not_evaluated</span><span class="t-dim">
+  chain           | </span><span class="t-neval">not_evaluated</span>
+
+<span class="t-dim">errors:</span>
+  <span class="t-fail">[cryptographic] SIGNATURE_INVALID: Ed25519 verification failed</span></pre>
+            <div class="axes" id="axes-panel">
+              <h3>Verification axes</h3>
+              <ul>
+                <li><span>cryptographic</span><span class="verdict v-pass">pass</span></li>
+                <li><span>semantic</span><span class="verdict v-pass">pass</span></li>
+                <li><span>authorization</span><span class="verdict v-pass">pass</span></li>
+                <li><span>temporal</span><span class="verdict v-pass">pass</span></li>
+                <li><span>revocation</span><span class="verdict v-pass">pass</span></li>
+                <li><span>replay</span><span class="verdict v-neval">not_evaluated</span></li>
+                <li><span>chain</span><span class="verdict v-neval">not_evaluated</span></li>
+              </ul>
+              <p class="axes-note">Replay and chain can be not_evaluated when required context is not supplied.</p>
+            </div>
+          </div>
+        </div>
+        <p class="term-cap">Captured Blackbox CLI output. The live in-browser playground will replace this panel.</p>
+      </div>
+      <div class="planet-spacer" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- POLICY / GATE -->
+  <section class="block policy" id="policy" aria-labelledby="policy-h">
+    <div class="wrap">
+      <div class="policy-grid">
+        <div>
+          <p class="eyebrow">Policy</p>
+          <h2 id="policy-h">Block the action. Sign the denial.</h2>
+          <p class="section-lead">Blackbox can block an action fail-closed and sign the denial as evidence.</p>
+        </div>
+        <div class="flow">
+          <div class="flow-card">
+            <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 6l5 6-5 6"/><path d="M12 18h8"/></svg>Action</div>
+            <div class="v">Delete production database</div>
+          </div>
+          <div class="flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+          <div class="flow-card">
+            <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>Policy callback</div>
+            <div class="v">Deny destructive production actions</div>
+          </div>
+          <div class="flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+          <div class="flow-card deny">
+            <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>Result</div>
+            <div class="v">Denied</div>
+          </div>
+          <div class="flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+          <div class="flow-card">
+            <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v6h6"/></svg>Signed denial receipt</div>
+            <div class="v file">denial.cose</div>
+          </div>
+        </div>
+      </div>
+      <p class="gate-note">The gate ships as a library, <code>@blackbox/gate</code>, with a policy callback. It is not a CLI command and there is no policy file.</p>
+    </div>
+  </section>
+
+  <!-- WHAT IT IS NOT -->
+  <section class="block limits" id="limits" aria-labelledby="limits-h">
+    <div class="wrap">
+      <div class="limits-grid">
+        <div class="limits-head">
+          <p class="eyebrow">Honest limits</p>
+          <h2 id="limits-h">What it is not.</h2>
+        </div>
+        <div class="limit-card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg></div>
+          <h3>Not externally audited</h3>
+          <p>This is v0.1.0.</p>
+        </div>
+        <div class="limit-card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 12h6"/></svg></div>
+          <h3>No formal verification.</h3>
+          <p>The implementation is not formally verified.</p>
+        </div>
+        <div class="limit-card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="8" cy="12" r="3.2"/><path d="M11 12h9M17 12v3"/></svg></div>
+          <h3>Ed25519 only</h3>
+          <p>Ed25519 signatures only.</p>
+        </div>
+        <div class="limit-statement">A receipt makes the record verifiable — not that the recorder told the truth about the world.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="block contact" id="contact" aria-labelledby="contact-h">
+    <div class="wrap">
+      <p class="eyebrow">Contact</p>
+      <h2 id="contact-h">Get in touch.</h2>
+      <div class="contact-grid">
+        <a href="https://github.com/blackbox-protocol/blackbox"><span>GitHub</span><strong>blackbox-protocol/blackbox</strong></a>
+        <a href="mailto:hello@blackboxprotocol.dev"><span>General</span><strong>hello@blackboxprotocol.dev</strong></a>
+        <a href="mailto:security@blackboxprotocol.dev"><span>Security</span><strong>security@blackboxprotocol.dev</strong></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Blackbox Protocol v0.1.0, Apache-2.0</span>
+    <a href="https://github.com/blackbox-protocol/blackbox">github.com/blackbox-protocol/blackbox</a>
+  </div>
+</footer>
+
+<script src="main.js" defer></script>
+</body>
+</html>

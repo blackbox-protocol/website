@@ -1,0 +1,36 @@
+name: site-content
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - '.github/workflows/site-content.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - '.github/workflows/site-content.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  content:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+
+      # Node built-ins only; no dependencies to install.
+      - name: content facts check (banned phrases / numbers)
+        run: node site/scripts/check-content.mjs
+
+      - name: external-request check (github.com / mailto only)
+        run: node site/scripts/check-external.mjs
